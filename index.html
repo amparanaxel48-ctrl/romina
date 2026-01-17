@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Para Romina 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 body{
   margin:0;
@@ -96,17 +95,12 @@ h1{ color:#c2185b; }
   0%{ opacity:0; transform:scale(0.5);}
   100%{ opacity:1; transform:scale(1);}
 }
-
-iframe{ display:none; }
 </style>
 </head>
-
 <body>
 
 <h1>Romina 💖</h1>
-
 <p id="frase">Presiona el corazón 💖</p>
-
 <button id="accion" onclick="siguiente()">💖</button>
 
 <div class="botones">
@@ -119,15 +113,26 @@ iframe{ display:none; }
   <p id="detalleFinal"></p>
 </div>
 
-<!-- Música -->
-<iframe
-  id="musica"
-  src="https://www.youtube.com/embed/JsAgrlr1RO4?enablejsapi=1&origin=http://example.com"
-  allow="autoplay">
-</iframe>
+<!-- Contenedor para la música usando YouTube API -->
+<div id="player"></div>
 
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-// Lista de frases románticas
+let player;
+
+// Creamos el reproductor de YouTube con la API
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    videoId: 'JsAgrlr1RO4',
+    playerVars: {
+      autoplay: 0,
+      controls: 0
+    }
+  });
+}
+
 const frases = [
   "Romina, tu sonrisa es mi lugar seguro 💕",
   "Pensar en ti hace mis días más bonitos ✨",
@@ -139,17 +144,16 @@ const frases = [
 let indice = 0;
 
 function siguiente(){
+  const fraseEl = document.getElementById("frase");
   if(indice < frases.length){
-    const fraseEl = document.getElementById("frase");
     fraseEl.style.transform = "scale(0.8)";
     setTimeout(() => {
       fraseEl.innerText = frases[indice];
       fraseEl.style.transform = "scale(1)";
     }, 200);
-    indice++; // incrementar después de usar el valor correcto
+    indice++;
   } else {
-    // Pregunta final con efecto
-    const fraseEl = document.getElementById("frase");
+    // Pregunta final
     fraseEl.classList.add("pregunta-final");
     fraseEl.innerText = "Romina… ¿quieres ser mi novia? 💍💖";
     document.getElementById("accion").style.display = "none";
@@ -162,12 +166,9 @@ function aceptar(){
     "radial-gradient(circle at top,#fff0f5,#ff69b4)";
   document.querySelector(".botones").style.display = "none";
   document.getElementById("final").style.display = "block";
-
-  document.getElementById("mensajeFinal").innerText =
-    "💖 Gracias por decir que sí 💖";
+  document.getElementById("mensajeFinal").innerText = "💖 Gracias por decir que sí 💖";
   document.getElementById("detalleFinal").innerText =
     "Prometo cuidarte, respetarte y hacerte sonreír cada día. Hoy empieza algo muy bonito contigo, Romina 🌹";
-
   iniciarMusica();
   lluviaFlores();
 }
@@ -175,28 +176,17 @@ function aceptar(){
 function rechazar(){
   document.querySelector(".botones").style.display = "none";
   document.getElementById("final").style.display = "block";
-
-  document.getElementById("mensajeFinal").innerText =
-    "💔 Gracias por tu sinceridad 💔";
+  document.getElementById("mensajeFinal").innerText = "💔 Gracias por tu sinceridad 💔";
   document.getElementById("detalleFinal").innerText =
     "Respeto tu decisión y agradezco tu honestidad. Siempre te desearé lo mejor 🌸";
 }
 
-// Iniciar música correctamente usando API de YouTube
 function iniciarMusica(){
-  const iframe = document.getElementById("musica");
-  // mensaje a YouTube para reproducir
-  iframe.contentWindow.postMessage(
-    JSON.stringify({
-      event: 'command',
-      func: 'playVideo',
-      args: []
-    }),
-    '*'
-  );
+  if(player && player.playVideo){
+    player.playVideo();
+  }
 }
 
-// Animación de flores
 function lluviaFlores(){
   for(let i=0;i<35;i++){
     const f = document.createElement("div");
@@ -210,6 +200,5 @@ function lluviaFlores(){
   }
 }
 </script>
-
 </body>
 </html>
