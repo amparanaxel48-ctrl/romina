@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Romina 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:radial-gradient(circle at top,#ffe6f0,#ffb6c1);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI',sans-serif;
+  text-align:center;
+  overflow:hidden;
+}
+
+h1{
+  color:#c2185b;
+  margin-bottom:10px;
+}
+
+.heart{
+  width:140px;
+  height:140px;
+  background:#ff4d6d;
+  position:relative;
+  transform:rotate(-45deg);
+  margin:25px 0;
+  cursor:pointer;
+  animation:latido 1.4s infinite;
+}
+
+.heart::before,
+.heart::after{
+  content:"";
+  width:140px;
+  height:140px;
+  background:#ff4d6d;
+  border-radius:50%;
+  position:absolute;
+}
+
+.heart::before{ top:-70px; left:0; }
+.heart::after{ left:70px; top:0; }
+
+@keyframes latido{
+  0%,100%{transform:rotate(-45deg) scale(1);}
+  50%{transform:rotate(-45deg) scale(1.1);}
+}
+
+#frase{
+  font-size:1.25em;
+  color:#6a1b4d;
+  max-width:320px;
+  min-height:70px;
+}
+
+.botones{
+  margin-top:20px;
+}
+
+button{
+  padding:12px 26px;
+  font-size:1em;
+  border:none;
+  border-radius:25px;
+  margin:8px;
+  cursor:pointer;
+}
+
+.si{
+  background:#ff4d6d;
+  color:white;
+}
+
+.no{
+  background:#ddd;
+  color:#555;
+}
+
+#final{
+  display:none;
+  margin-top:20px;
+  padding:20px;
+}
+
+.flor{
+  position:fixed;
+  bottom:-30px;
+  font-size:26px;
+  animation:subir 5s linear forwards;
+}
+
+@keyframes subir{
+  from{transform:translateY(0);opacity:1;}
+  to{transform:translateY(-110vh);opacity:0;}
+}
+
+iframe{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Romina 💖</h1>
+
+<div class="heart" onclick="mostrarFrase()"></div>
+
+<p id="frase">Toca el corazón ❤️</p>
+
+<div class="botones">
+  <button class="si" onclick="aceptar()">Sí 💕</button>
+  <button class="no" onclick="rechazar()">No 😢</button>
+</div>
+
+<div id="final">
+  <h2>💍 ¿Quieres ser mi novia, Romina? 💍</h2>
+  <p>
+    Prometo cuidarte, respetarte y hacerte sonreír todos los días.  
+    Gracias por llegar a mi vida 💖
+  </p>
+</div>
+
+<!-- Música (se reproduce al presionar SÍ) -->
+<iframe
+  id="musica"
+  src="https://www.youtube.com/embed/JsAgrlr1RO4?enablejsapi=1"
+  allow="autoplay">
+</iframe>
+
+<script>
+const frases=[
+  "Romina, tu sonrisa es mi lugar seguro 💕",
+  "Pensar en ti hace mis días más bonitos ✨",
+  "Eres calma, alegría y amor ❤️",
+  "Contigo todo se siente mejor 🌹",
+  "Mi corazón te eligió sin dudar 💖"
+];
+
+function mostrarFrase(){
+  const r=Math.floor(Math.random()*frases.length);
+  document.getElementById("frase").innerText=frases[r];
+}
+
+function aceptar(){
+  document.getElementById("final").style.display="block";
+  document.getElementById("frase").innerText="¡Dijiste que SÍ! 💖";
+  reproducirMusica();
+  lluvia();
+}
+
+function rechazar(){
+  document.getElementById("frase").innerText="Gracias por tu sinceridad 💔";
+}
+
+function reproducirMusica(){
+  const iframe=document.getElementById("musica");
+  iframe.contentWindow.postMessage(
+    '{"event":"command","func":"playVideo","args":""}',
+    "*"
+  );
+}
+
+function lluvia(){
+  for(let i=0;i<30;i++){
+    const f=document.createElement("div");
+    f.className="flor";
+    f.innerText=["🌹","🌸","💐","💖","✨"][Math.floor(Math.random()*5)];
+    f.style.left=Math.random()*100+"vw";
+    f.style.animationDuration=3+Math.random()*3+"s";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),6000);
+  }
+}
+</script>
+
+</body>
+</html>
