@@ -17,76 +17,53 @@ body{
   font-family:'Segoe UI',sans-serif;
   text-align:center;
   overflow:hidden;
+  transition:background 1s;
 }
 
 h1{
   color:#c2185b;
-  margin-bottom:10px;
-}
-
-.heart{
-  width:140px;
-  height:140px;
-  background:#ff4d6d;
-  position:relative;
-  transform:rotate(-45deg);
-  margin:25px 0;
-  cursor:pointer;
-  animation:latido 1.4s infinite;
-}
-
-.heart::before,
-.heart::after{
-  content:"";
-  width:140px;
-  height:140px;
-  background:#ff4d6d;
-  border-radius:50%;
-  position:absolute;
-}
-
-.heart::before{ top:-70px; left:0; }
-.heart::after{ left:70px; top:0; }
-
-@keyframes latido{
-  0%,100%{transform:rotate(-45deg) scale(1);}
-  50%{transform:rotate(-45deg) scale(1.1);}
 }
 
 #frase{
-  font-size:1.25em;
+  font-size:1.3em;
   color:#6a1b4d;
   max-width:320px;
-  min-height:70px;
+  min-height:90px;
+  margin:20px 0;
 }
 
-.botones{
-  margin-top:20px;
-}
-
-button{
-  padding:12px 26px;
-  font-size:1em;
+#accion{
+  padding:14px 32px;
+  font-size:1.1em;
   border:none;
-  border-radius:25px;
-  margin:8px;
+  border-radius:30px;
+  background:#ff4d6d;
+  color:white;
   cursor:pointer;
 }
 
-.si{
-  background:#ff4d6d;
-  color:white;
+.botones{
+  display:none;
+  margin-top:25px;
 }
 
-.no{
-  background:#ddd;
-  color:#555;
+.botones button{
+  padding:12px 28px;
+  font-size:1em;
+  border:none;
+  border-radius:25px;
+  margin:10px;
+  cursor:pointer;
 }
+
+.si{ background:#ff4d6d; color:white; }
+.no{ background:#ddd; color:#555; }
 
 #final{
   display:none;
+  max-width:330px;
   margin-top:20px;
-  padding:20px;
+  color:#6a1b4d;
 }
 
 .flor{
@@ -101,9 +78,7 @@ button{
   to{transform:translateY(-110vh);opacity:0;}
 }
 
-iframe{
-  display:none;
-}
+iframe{ display:none; }
 </style>
 </head>
 
@@ -111,9 +86,9 @@ iframe{
 
 <h1>Romina 💖</h1>
 
-<div class="heart" onclick="mostrarFrase()"></div>
+<p id="frase">Presiona el botón 💕</p>
 
-<p id="frase">Toca el corazón ❤️</p>
+<button id="accion" onclick="siguiente()">Presiona aquí 💖</button>
 
 <div class="botones">
   <button class="si" onclick="aceptar()">Sí 💕</button>
@@ -121,14 +96,14 @@ iframe{
 </div>
 
 <div id="final">
-  <h2>💍 ¿Quieres ser mi novia, Romina? 💍</h2>
+  <h2>💖 Gracias por decir que sí 💖</h2>
   <p>
-    Prometo cuidarte, respetarte y hacerte sonreír todos los días.  
-    Gracias por llegar a mi vida 💖
+    Prometo cuidarte, respetarte y hacerte sonreír cada día.  
+    Mi corazón es tuyo, Romina 🌹
   </p>
 </div>
 
-<!-- Música (se reproduce al presionar SÍ) -->
+<!-- Música -->
 <iframe
   id="musica"
   src="https://www.youtube.com/embed/JsAgrlr1RO4?enablejsapi=1"
@@ -136,7 +111,7 @@ iframe{
 </iframe>
 
 <script>
-const frases=[
+const frases = [
   "Romina, tu sonrisa es mi lugar seguro 💕",
   "Pensar en ti hace mis días más bonitos ✨",
   "Eres calma, alegría y amor ❤️",
@@ -144,37 +119,49 @@ const frases=[
   "Mi corazón te eligió sin dudar 💖"
 ];
 
-function mostrarFrase(){
-  const r=Math.floor(Math.random()*frases.length);
-  document.getElementById("frase").innerText=frases[r];
+let indice = 0;
+
+function siguiente(){
+  if(indice < frases.length){
+    document.getElementById("frase").innerText = frases[indice];
+    indice++;
+  } else {
+    document.getElementById("frase").innerText =
+      "¿Quieres ser mi novia, Romina? 💍💖";
+    document.getElementById("accion").style.display = "none";
+    document.querySelector(".botones").style.display = "block";
+  }
 }
 
 function aceptar(){
-  document.getElementById("final").style.display="block";
-  document.getElementById("frase").innerText="¡Dijiste que SÍ! 💖";
-  reproducirMusica();
-  lluvia();
+  document.body.style.background =
+    "radial-gradient(circle at top,#fff0f5,#ff69b4)";
+  document.getElementById("final").style.display = "block";
+  iniciarMusica();
+  lluviaFlores();
 }
 
 function rechazar(){
-  document.getElementById("frase").innerText="Gracias por tu sinceridad 💔";
+  document.getElementById("frase").innerText =
+    "Gracias por ser honesta 💔";
 }
 
-function reproducirMusica(){
-  const iframe=document.getElementById("musica");
+function iniciarMusica(){
+  const iframe = document.getElementById("musica");
   iframe.contentWindow.postMessage(
     '{"event":"command","func":"playVideo","args":""}',
     "*"
   );
 }
 
-function lluvia(){
+function lluviaFlores(){
   for(let i=0;i<30;i++){
-    const f=document.createElement("div");
-    f.className="flor";
-    f.innerText=["🌹","🌸","💐","💖","✨"][Math.floor(Math.random()*5)];
-    f.style.left=Math.random()*100+"vw";
-    f.style.animationDuration=3+Math.random()*3+"s";
+    const f = document.createElement("div");
+    f.className = "flor";
+    f.innerText = ["🌸","🌹","💐","💖","✨"]
+      [Math.floor(Math.random()*5)];
+    f.style.left = Math.random()*100 + "vw";
+    f.style.animationDuration = 3 + Math.random()*3 + "s";
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),6000);
   }
