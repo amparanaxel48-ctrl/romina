@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Romina 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:radial-gradient(circle at top,#ffe6f0,#ffb6c1);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI',sans-serif;
+  text-align:center;
+  overflow:hidden;
+  transition:background 1s;
+}
+
+h1{ color:#c2185b; }
+
+#frase{
+  font-size:1.3em;
+  color:#6a1b4d;
+  max-width:350px;
+  min-height:90px;
+  margin:20px 0;
+  transition: transform 0.5s;
+}
+
+#accion{
+  width:80px;
+  height:80px;
+  font-size:2.5em;
+  border:none;
+  border-radius:50%;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  animation:latido 1s infinite;
+}
+
+@keyframes latido{
+  0%,100%{ transform: scale(1); }
+  50%{ transform: scale(1.2); }
+}
+
+.botones{
+  display:none;
+  margin-top:25px;
+}
+
+.botones button{
+  padding:14px 30px;
+  font-size:1.1em;
+  border:none;
+  border-radius:25px;
+  margin:10px;
+  cursor:pointer;
+  transition: transform 0.3s;
+}
+
+.si{ background:#ff4d6d; color:white; }
+.no{ background:#ddd; color:#555; }
+
+#final{
+  display:none;
+  max-width:350px;
+  margin-top:20px;
+  color:#6a1b4d;
+}
+
+.flor{
+  position:fixed;
+  bottom:-30px;
+  font-size:26px;
+  animation:subir linear forwards;
+}
+
+@keyframes subir{
+  from{transform:translateY(0) rotate(0deg); opacity:1;}
+  to{transform:translateY(-110vh) rotate(360deg); opacity:0;}
+}
+
+.pregunta-final{
+  font-weight:bold;
+  font-size:1.4em;
+  color:#c2185b;
+  animation:aparecer 1s ease forwards;
+}
+
+@keyframes aparecer{
+  0%{ opacity:0; transform:scale(0.5);}
+  100%{ opacity:1; transform:scale(1);}
+}
+</style>
+</head>
+<body>
+
+<h1>Romina 💖</h1>
+<p id="frase">Presiona el corazón 💖</p>
+<button id="accion" onclick="siguiente()">💖</button>
+
+<div class="botones">
+  <button class="si" onclick="aceptar()">Sí 💕</button>
+  <button class="no" onclick="rechazar()">No 😢</button>
+</div>
+
+<div id="final">
+  <h2 id="mensajeFinal"></h2>
+  <p id="detalleFinal"></p>
+</div>
+
+<!-- Contenedor para la música usando YouTube API -->
+<div id="player"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+let player;
+
+// Creamos el reproductor de YouTube con la API
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    videoId: 'JsAgrlr1RO4',
+    playerVars: {
+      autoplay: 0,
+      controls: 0
+    }
+  });
+}
+
+const frases = [
+  "Romina, tu sonrisa es mi lugar seguro 💕",
+  "Pensar en ti hace mis días más bonitos ✨",
+  "Eres calma, alegría y amor ❤️",
+  "Contigo todo se siente mejor 🌹",
+  "Mi corazón te eligió sin dudar 💖"
+];
+
+let indice = 0;
+
+function siguiente(){
+  const fraseEl = document.getElementById("frase");
+  if(indice < frases.length){
+    fraseEl.style.transform = "scale(0.8)";
+    setTimeout(() => {
+      fraseEl.innerText = frases[indice];
+      fraseEl.style.transform = "scale(1)";
+    }, 200);
+    indice++;
+  } else {
+    // Pregunta final
+    fraseEl.classList.add("pregunta-final");
+    fraseEl.innerText = "Romina… ¿quieres ser mi novia? 💍💖";
+    document.getElementById("accion").style.display = "none";
+    document.querySelector(".botones").style.display = "block";
+  }
+}
+
+function aceptar(){
+  document.body.style.background =
+    "radial-gradient(circle at top,#fff0f5,#ff69b4)";
+  document.querySelector(".botones").style.display = "none";
+  document.getElementById("final").style.display = "block";
+  document.getElementById("mensajeFinal").innerText = "💖 Gracias por decir que sí 💖";
+  document.getElementById("detalleFinal").innerText =
+    "Prometo cuidarte, respetarte y hacerte sonreír cada día. Hoy empieza algo muy bonito contigo, Romina 🌹";
+  iniciarMusica();
+  lluviaFlores();
+}
+
+function rechazar(){
+  document.querySelector(".botones").style.display = "none";
+  document.getElementById("final").style.display = "block";
+  document.getElementById("mensajeFinal").innerText = "💔 Gracias por tu sinceridad 💔";
+  document.getElementById("detalleFinal").innerText =
+    "Respeto tu decisión y agradezco tu honestidad. Siempre te desearé lo mejor 🌸";
+}
+
+function iniciarMusica(){
+  if(player && player.playVideo){
+    player.playVideo();
+  }
+}
+
+function lluviaFlores(){
+  for(let i=0;i<35;i++){
+    const f = document.createElement("div");
+    f.className = "flor";
+    f.innerText = ["🌸","🌹","💐","💖","✨"][Math.floor(Math.random()*5)];
+    f.style.left = Math.random()*100 + "vw";
+    f.style.animationDuration = (3 + Math.random()*3) + "s";
+    f.style.fontSize = (20 + Math.random()*20) + "px";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),6000);
+  }
+}
+</script>
+</body>
+</html>
