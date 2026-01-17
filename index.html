@@ -32,8 +32,9 @@ h1{ color:#c2185b; }
 }
 
 #accion{
-  padding:16px 36px;
-  font-size:2em;
+  width:80px;
+  height:80px;
+  font-size:2.5em;
   border:none;
   border-radius:50%;
   background:#ff4d6d;
@@ -121,11 +122,12 @@ iframe{ display:none; }
 <!-- Música -->
 <iframe
   id="musica"
-  src="https://www.youtube.com/embed/JsAgrlr1RO4?enablejsapi=1"
+  src="https://www.youtube.com/embed/JsAgrlr1RO4?enablejsapi=1&origin=http://example.com"
   allow="autoplay">
 </iframe>
 
 <script>
+// Lista de frases románticas
 const frases = [
   "Romina, tu sonrisa es mi lugar seguro 💕",
   "Pensar en ti hace mis días más bonitos ✨",
@@ -144,7 +146,7 @@ function siguiente(){
       fraseEl.innerText = frases[indice];
       fraseEl.style.transform = "scale(1)";
     }, 200);
-    indice++;
+    indice++; // incrementar después de usar el valor correcto
   } else {
     // Pregunta final con efecto
     const fraseEl = document.getElementById("frase");
@@ -180,20 +182,26 @@ function rechazar(){
     "Respeto tu decisión y agradezco tu honestidad. Siempre te desearé lo mejor 🌸";
 }
 
+// Iniciar música correctamente usando API de YouTube
 function iniciarMusica(){
   const iframe = document.getElementById("musica");
+  // mensaje a YouTube para reproducir
   iframe.contentWindow.postMessage(
-    '{"event":"command","func":"playVideo","args":""}',
-    "*"
+    JSON.stringify({
+      event: 'command',
+      func: 'playVideo',
+      args: []
+    }),
+    '*'
   );
 }
 
+// Animación de flores
 function lluviaFlores(){
   for(let i=0;i<35;i++){
     const f = document.createElement("div");
     f.className = "flor";
-    f.innerText = ["🌸","🌹","💐","💖","✨"]
-      [Math.floor(Math.random()*5)];
+    f.innerText = ["🌸","🌹","💐","💖","✨"][Math.floor(Math.random()*5)];
     f.style.left = Math.random()*100 + "vw";
     f.style.animationDuration = (3 + Math.random()*3) + "s";
     f.style.fontSize = (20 + Math.random()*20) + "px";
